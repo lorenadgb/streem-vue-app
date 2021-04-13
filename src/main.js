@@ -4,6 +4,7 @@ import axios from 'axios'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 
 Vue.prototype.$http = axios
+axios.defaults.baseURL = 'http://localhost:3000'
 
 // Import Bootstrap an BootstrapVue CSS files (order is important)
 import 'bootstrap/dist/css/bootstrap.css'
@@ -16,6 +17,6 @@ Vue.use(IconsPlugin)
 
 new Vue({
   el: '#app',
-  template: '<App/>',
+  render: h => h(App),
   components: { App }
 })
