@@ -111,7 +111,8 @@ export default {
         };
 
         for (var key in data) {
-          this.labels.push(key);
+          let formattedDate = new Date(key).toLocaleDateString();
+          this.labels.push(formattedDate);
           Object.keys(medium).forEach(type => {
             medium[type].push(this.filterMedia(data[key], type).length);
           });
