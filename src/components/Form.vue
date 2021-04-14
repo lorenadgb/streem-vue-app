@@ -65,28 +65,23 @@ export default {
       after:  new Date('2019-08-01'),
       interval: 1,
       colours: {
-        'TV':     '#f87979',
-        'PRINT':  '#3D5B96',
-        'ONLINE': '#1EFFFF',
-        'RADIO':  '#3b662c',
-        'SOCIAL': '#adab39'
+        'Online': '#f87979',
+        'Radio':  '#3D5B96',
+        'TV':     '#1EFFFF',
+        'Print':  '#3b662c',
+        'Social': '#adab39'
       },
       dateFormat: 'DD/MM/YYYY'
     }
   },
-  computed: {
-    errorMessage() {
-      if (!this.query) return 'Query is required.';
-      if (!this.before) return 'Start Date is required.';
-      if (!this.after) return 'End Date is required.';
-      return '';
-    },
-  },
   methods:{
-    filterMedia(array, medium) {
-      return array.filter(function (el) {
-        return el.medium === medium;
-      });
+    docCount(array, medium) {
+      let doc_count = 0;
+      let doc = array.find(element => element.key === medium);
+      if (doc !== undefined) {
+        doc_count = doc.doc_count;
+      }
+      return doc_count;
     },
     submitForm(){
       axios.get('/api/v1/news', {
@@ -94,7 +89,7 @@ export default {
           query: this.query,
           before: moment(this.before).format('x'),
           after: moment(this.after).format('x'),
-          interval: this.interval,
+          interval: this.interval + 'd',
         },
       }).then((response) => {
         this.loaded = false;
@@ -103,18 +98,19 @@ export default {
         const data = response.data;
 
         let medium = {
-          'TV': [],
-          'PRINT': [],
-          'ONLINE': [],
-          'RADIO': [],
-          'SOCIAL': []
+          'Online': [],
+          'Radio':  [],
+          'TV':     [],
+          'Print':  [],
+          'Social': [],
         };
 
-        for (var key in data) {
-          let formattedDate = new Date(key).toLocaleDateString();
+        for (var item in data) {
+          let formattedDate = new Date(data[item]['label']).toLocaleDateString();
           this.labels.push(formattedDate);
+
           Object.keys(medium).forEach(type => {
-            medium[type].push(this.filterMedia(data[key], type).length);
+            medium[type].push(this.docCount(data[item]['data'], type));
           });
         }
         Object.keys(medium).forEach(type => {
