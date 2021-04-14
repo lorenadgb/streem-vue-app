@@ -7,19 +7,19 @@
       </div>
 
       <div class="form-group">
-        <label for="before">Start Date</label>
-        <date-picker v-model="before" id="before" type="datetime"></date-picker>
+        <label for="after">Start Date</label>
+        <date-picker v-model="after" id="after" type="date"></date-picker>
       </div>
 
       <div class="form-group">
-        <label for="after">End Date</label>
-        <date-picker v-model="after" id="after" type="datetime"></date-picker>
+        <label for="before">End Date</label>
+        <date-picker v-model="before" id="before" type="date"></date-picker>
       </div>
 
       <div class="form-group">
-        <label for="interval">Range</label>
-        <input type="range" name="range" class="form-control-range" id="interval" min="1" max="30" v-model="interval">
-        <span v-text="interval">daaaa</span>
+        <label for="interval">Interval</label>
+        <input type="range" name="interval" class="form-control-range" id="interval" min="1" max="31" v-model="interval">
+        <span v-text="interval"></span>d
       </div>
 
       <div class="form-group">
@@ -30,6 +30,11 @@
         {{ errorMessage }}
       </p>
     </form>
+
+    <StackedBar v-if="loaded"
+      :label="labels"
+      :chartData="chartData"
+    />
   </div>
 </template>
 
@@ -37,17 +42,31 @@
 import axios from 'axios';
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
-import moment from 'moment'
+import moment from 'moment';
+import StackedBar from "./graphs/StackedBar";
 
 export default {
   name: 'PostFormAxios',
-  components: { DatePicker },
+  components: {
+    DatePicker,
+    StackedBar
+  },
   data(){
     return {
-      query: null,
-      before: null,
-      after: null,
-      interval: 1
+      loaded: false,
+      labels: [],
+      chartData: [],
+      query: 'scott',
+      before: new Date('2019-08-30'),
+      after:  new Date('2019-08-01'),
+      interval: 1,
+      colours: {
+        'TV':     '#f87979',
+        'PRINT':  '#3D5B96',
+        'ONLINE': '#1EFFFF',
+        'RADIO':  '#3b662c',
+        'SOCIAL': '#adab39'
+      }
     }
   },
   computed: {
@@ -59,6 +78,11 @@ export default {
     },
   },
   methods:{
+    filterMedia(array, medium) {
+      return array.filter(function (el) {
+        return el.medium === medium;
+      });
+    },
     submitForm(){
       axios.get('/api/v1/news', {
         params: {
@@ -68,15 +92,35 @@ export default {
           interval: this.interval,
         },
       }).then((response) => {
-          console.log(response.data);
-          console.log(response.status);
-          console.log(response.statusText);
-          console.log(response.headers);
-          console.log(response.config);
-        }).catch(() => {
-          // error.response.status Check status code
-        }).finally(() => {
-        //Perform action in always
+        this.loaded = false;
+        this.labels = [];
+        this.chartData = [];
+        const data = response.data;
+
+        let medium = {
+          'TV': [],
+          'PRINT': [],
+          'ONLINE': [],
+          'RADIO': [],
+          'SOCIAL': []
+        };
+
+        for (var key in data) {
+          this.labels.push(key);
+          Object.keys(medium).forEach(type => {
+            medium[type].push(this.filterMedia(data[key], type).length);
+          });
+        }
+        Object.keys(medium).forEach(type => {
+          this.chartData.push(
+            {
+              label: type,
+              backgroundColor: this.colours[type],
+              data: medium[type]
+            }
+          )
+        });
+        this.loaded = true;
       });
     }
   }

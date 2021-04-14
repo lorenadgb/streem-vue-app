@@ -2,7 +2,7 @@
   <div id="app">
     <Header/>
     <Form/>
-    <app-footer />
+    <AppFooter/>
   </div>
 </template>
 
