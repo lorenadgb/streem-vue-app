@@ -8,18 +8,19 @@
           placeholder="Enter something..."
           rows="3"
           max-rows="6"
+          required
         ></b-form-textarea>
       </div>
 
       <div class="row">
         <div class="col-md-3">
           <label for="after">Start Date</label>
-          <date-picker v-model="after" id="after" type="date" :format="dateFormat"></date-picker>
+          <date-picker v-model="after" id="after" type="date" :format="dateFormat" required></date-picker>
         </div>
 
         <div class="col-md-3">
           <label for="before">End Date</label>
-          <date-picker v-model="before" id="before" type="date" :format="dateFormat"></date-picker>
+          <date-picker v-model="before" id="before" type="date" :format="dateFormat" required></date-picker>
         </div>
       </div>
 
