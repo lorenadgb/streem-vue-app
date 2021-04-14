@@ -1,10 +1,8 @@
 <script>
-import { Bar, mixins } from 'vue-chartjs';
-const { reactiveProp } = mixins;
+import { Bar } from 'vue-chartjs';
 
 export default {
   extends: Bar,
-  mixins: [reactiveProp],
   props: {
     label: {
       type: Array
@@ -14,24 +12,36 @@ export default {
     },
   },
   mounted() {
-    this.renderChart({
-      labels: this.label,
-      datasets: this.chartData
-    },
-    {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        xAxes: [{
-          stacked: true,
-          categoryPercentage: 0.5,
-          barPercentage: 1
-        }],
-        yAxes: [{
-          stacked: true
-        }]
-      }
-    })
+    this.renderBarChart();
+  },
+  methods:{
+    renderBarChart(){
+      this.renderChart(
+        {
+          labels: this.label,
+          datasets: this.chartData
+        },
+        {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            xAxes: [{
+              stacked: true,
+              categoryPercentage: 0.5,
+              barPercentage: 1
+            }],
+            yAxes: [{
+              stacked: true
+            }]
+          }
+        }
+      )
+    }
+  },
+  watch: {
+    chartData() {
+      this.renderBarChart();
+    }
   }
 };
 </script>
