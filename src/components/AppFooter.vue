@@ -1,5 +1,6 @@
 <template>
-  <footer>
+  <footer class="fixed-bottom text-center">
+    <hr/>
     <p>Copyright &copy; {{ currentYear }} </p>
   </footer>
 </template>

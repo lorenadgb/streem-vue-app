@@ -2,33 +2,36 @@
   <div>
     <form v-on:submit.prevent="submitForm">
       <div class="form-group">
-        <label for="query">Query</label>
-        <input type="text" class="form-control" id="query" placeholder="Query" v-model="query">
+        <b-form-textarea
+          id="query"
+          v-model="query"
+          placeholder="Enter something..."
+          rows="3"
+          max-rows="6"
+        ></b-form-textarea>
       </div>
 
-      <div class="form-group">
-        <label for="after">Start Date</label>
-        <date-picker v-model="after" id="after" type="date"></date-picker>
+      <div class="row">
+        <div class="col-md-3">
+          <label for="after">Start Date</label>
+          <date-picker v-model="after" id="after" type="date"></date-picker>
+        </div>
+
+        <div class="col-md-3">
+          <label for="before">End Date</label>
+          <date-picker v-model="before" id="before" type="date"></date-picker>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="before">End Date</label>
-        <date-picker v-model="before" id="before" type="date"></date-picker>
+      <div class="mt-4 text-center">
+        <label>Interval</label>
+        <b-form-input id="interval" v-model="interval" type="range" min="1" max="31"></b-form-input>
+        <div class="mt-1">{{ interval }}d</div>
       </div>
 
-      <div class="form-group">
-        <label for="interval">Interval</label>
-        <input type="range" name="interval" class="form-control-range" id="interval" min="1" max="31" v-model="interval">
-        <span v-text="interval"></span>d
+      <div class="mt-5 text-center">
+        <button class="btn btn-primary">Search</button>
       </div>
-
-      <div class="form-group">
-        <button class="btn btn-primary">Submit</button>
-      </div>
-
-      <p class="text-red-600 text-xs italic mt-1" v-if="errorMessage">
-        {{ errorMessage }}
-      </p>
     </form>
 
     <StackedBar v-if="loaded"
@@ -56,7 +59,7 @@ export default {
       loaded: false,
       labels: [],
       chartData: [],
-      query: 'scott',
+      query: '',
       before: new Date('2019-08-30'),
       after:  new Date('2019-08-01'),
       interval: 1,
@@ -126,3 +129,7 @@ export default {
   }
 }
 </script>
+
+<style>
+
+</style>
