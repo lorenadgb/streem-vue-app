@@ -30,7 +30,7 @@
         <div class="mt-1">{{ interval }}d</div>
       </div>
 
-      <div class="mt-5 text-center">
+      <div class="mt-5 mb-5 text-center">
         <button class="btn btn-primary">Search</button>
       </div>
     </form>
@@ -133,5 +133,11 @@ export default {
 </script>
 
 <style>
-
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:visited {
+  background-color: black !important;
+  border-color: black;
+}
 </style>
