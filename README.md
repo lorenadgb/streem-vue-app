@@ -6,6 +6,8 @@ The ES query filters only documents that have all the searched terms.
 
 All fields are required.
 
+<img src="https://user-images.githubusercontent.com/5891407/114794953-dc513500-9dd0-11eb-9fd4-ae1508c869ff.png" data-canonical-src="https://user-images.githubusercontent.com/5891407/114794953-dc513500-9dd0-11eb-9fd4-ae1508c869ff.png" width="700"/>
+
 ###Dependencies
 
 ```
